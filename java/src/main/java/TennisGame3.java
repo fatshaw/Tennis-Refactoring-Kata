@@ -3,6 +3,7 @@ public class TennisGame3 implements TennisGame {
 
     public static final String[] SCORE_NAME = {"Love", "Fifteen", "Thirty", "Forty"};
     public static final String DEUCE = "Deuce";
+    public static final String ALL = "All";
     private int point2;
     private int point1;
     private String player1Name;
@@ -14,28 +15,24 @@ public class TennisGame3 implements TennisGame {
     }
 
     public String getScore() {
-        if (isSameScore()) {
-            return isDeuce() ? deuce() : sameScore();
-        }
-        if (isNormalScore()) {
-            return normalScore();
-        }
-        return isAdvantageScore() ? advantageString() : winString();
+        return isSameScore() ? (isDeuce() ? deuce() : sameScore())
+                : isNormalScore() ? normalScore()
+                : isAdvantageScore() ? advantage() : win();
     }
 
     private String sameScore() {
-        return SCORE_NAME[point1] + "-All";
+        return SCORE_NAME[point1] + "-" + ALL;
     }
 
     private String deuce() {
         return DEUCE;
     }
 
-    private String winString() {
+    private String win() {
         return "Win for " + (point1 - point2 > 0 ? player1Name : player2Name);
     }
 
-    private String advantageString() {
+    private String advantage() {
         return "Advantage " + (point1 - point2 > 0 ? player1Name : player2Name);
     }
 
