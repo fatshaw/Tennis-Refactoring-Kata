@@ -2,6 +2,7 @@
 public class TennisGame3 implements TennisGame {
 
     public static final String[] SCORE_NAME = {"Love", "Fifteen", "Thirty", "Forty"};
+    public static final String DEUCE = "Deuce";
     private int point2;
     private int point1;
     private String player1Name;
@@ -13,16 +14,49 @@ public class TennisGame3 implements TennisGame {
     }
 
     public String getScore() {
-        if (point1 < 4 && point2 < 4) {
-            if (point1 + point2 == 6) return "Deuce";
-            return (point1 == point2) ? SCORE_NAME[point1] + "-All" : SCORE_NAME[point1] + "-" + SCORE_NAME[point2];
-        } else {
-            if (point1 == point2) {
-                return "Deuce";
-            }
-            String s = point1 > point2 ? player1Name : player2Name;
-            return ((point1 - point2) * (point1 - point2) == 1) ? "Advantage " + s : "Win for " + s;
+        if (isSameScore()) {
+            return isDeuce() ? deuce() : sameScore();
         }
+        if (isNormalScore()) {
+            return normalScore();
+        }
+        return isAdvantageScore() ? advantageString() : winString();
+    }
+
+    private String sameScore() {
+        return SCORE_NAME[point1] + "-All";
+    }
+
+    private String deuce() {
+        return DEUCE;
+    }
+
+    private String winString() {
+        return "Win for " + (point1 - point2 > 0 ? player1Name : player2Name);
+    }
+
+    private String advantageString() {
+        return "Advantage " + (point1 - point2 > 0 ? player1Name : player2Name);
+    }
+
+    private boolean isAdvantageScore() {
+        return Math.abs(point1 - point2) == 1;
+    }
+
+    private boolean isDeuce() {
+        return isSameScore() && point1 >= 3;
+    }
+
+    private String normalScore() {
+        return SCORE_NAME[point1] + "-" + SCORE_NAME[point2];
+    }
+
+    private boolean isNormalScore() {
+        return point1 < 4 && point2 < 4;
+    }
+
+    private boolean isSameScore() {
+        return point1 == point2;
     }
 
     public void wonPoint(String playerName) {
